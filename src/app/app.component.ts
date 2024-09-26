@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';  // Import RouterModule
+import { HeaderComponent } from './header.component';
 
 @Component({
-  selector: 'cms-root',
-  standalone: true,
-  imports: [RouterOutlet],
+  selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
+  standalone: true,  // Ensure this component is standalone
+  imports: [HeaderComponent, RouterModule],  // Add RouterModule to imports
 })
 export class AppComponent {
   title = 'cms';

@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'cms-contact-list',
-  standalone: true,
-  imports: [],
+  selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
-  styleUrl: './contact-list.component.css'
+  styleUrls: ['./contact-list.component.css'],
+  standalone: true  // This must be set to true for standalone components
 })
-export class ContactListComponent {
-
-}
+export class ContactListComponent { }
