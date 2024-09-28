@@ -21,10 +21,8 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets",   // Include assets folder
+              "src/favicon.ico"   // Include favicon
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -80,10 +78,8 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets",   // Include assets folder for tests as well
+              "src/favicon.ico"
             ],
             "styles": [
               "src/styles.css"
@@ -95,3 +91,4 @@
     }
   }
 }
+

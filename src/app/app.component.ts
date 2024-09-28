@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';  // Import RouterModule
 import { HeaderComponent } from './header.component';
+import { ContactsComponent } from './contacts/contacts.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  standalone: true,  // Ensure this component is standalone
-  imports: [HeaderComponent, RouterModule],  // Add RouterModule to imports
+  standalone: true,
+  imports: [HeaderComponent, ContactsComponent, RouterModule]
 })
-export class AppComponent {
-  title = 'cms';
-}
+export class AppComponent { }
