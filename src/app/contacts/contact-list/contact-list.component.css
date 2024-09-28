@@ -8,6 +8,11 @@
     border-bottom: 1px solid #ddd;
   }
   
+  
+  .panel-heading .panel-title {
+    font-weight: bold;  /* Adds Contacts Bold. */
+  }
+  
   /* New Contact button styling */
   .panel-heading .btn {
     background-color: #5cb85c;
@@ -16,6 +21,7 @@
     padding: 5px 15px;
     margin-left: auto; /* Ensures the button stays on the right */
   }
+  
   /* Hover effect for the contact list */
   .list-group-item:hover {
     background-color: #e6f7ff;  /* Highlight background color on hover */
