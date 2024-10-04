@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ContactItemComponent } from '../contact-item/contact-item.component';  // Import ContactItemComponent
 
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.css'],
   standalone: true,
-  imports: [CommonModule]  // Import CommonModule to use *ngFor
+  imports: [CommonModule, ContactItemComponent]  // Add ContactItemComponent to imports array
 })
 export class ContactListComponent {
   contacts = [

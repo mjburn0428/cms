@@ -6,10 +6,8 @@
   <div class="panel-body">
     <ul class="list-group">
       <li class="list-group-item" *ngFor="let contact of contacts">
-        <div class="contact-details">
-          <img [src]="contact.imageUrl" alt="{{ contact.name }}" class="contact-image">
-          <span class="contact-name">{{ contact.name }}</span>
-        </div>
+        <!-- Pass the contact object to the ContactItemComponent -->
+        <cms-contact-item [contact]="contact"></cms-contact-item>
       </li>
     </ul>
   </div>
