@@ -1,17 +1,17 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContactItemComponent } from '../contact-item/contact-item.component';  // Import ContactItemComponent
-import { Contact } from '../models/contact.model';  // Import Contact model
+import { ContactItemComponent } from '../contact-item/contact-item.component';
+import { Contact } from '../models/contact.model';
 
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.css'],
   standalone: true,
-  imports: [CommonModule, ContactItemComponent]  // Add ContactItemComponent to imports array
+  imports: [CommonModule, ContactItemComponent]
 })
 export class ContactListComponent {
-  @Output() selectedContactEvent = new EventEmitter<Contact>();  // Create EventEmitter for Contact
+  @Output() selectedContactEvent = new EventEmitter<Contact>();
 
   contacts: Contact[] = [
     {
@@ -32,10 +32,7 @@ export class ContactListComponent {
     }
   ];
 
-  constructor() {}
-
-  // Method to emit the selected contact
   onSelected(contact: Contact) {
-    this.selectedContactEvent.emit(contact);  // Emit the selected contact
+    this.selectedContactEvent.emit(contact);
   }
 }
