@@ -17,7 +17,7 @@ export class MessageEditComponent {
   msgTextInputRef!: ElementRef;
   @Output() addMessageEvent = new EventEmitter<Message>();
 
-  currentSender: string = 'Joe';  // Replace with your desired name
+  currentSender: string = 'Joe Burner';  // Replace with your desired name
 
   onSendMessage() {
     const subjectValue = this.subjectInputRef.nativeElement.value;

@@ -29,6 +29,14 @@ export class ContactListComponent {
       phone: '208-496-3768',
       imageUrl: '/assets/images/barzeer.jpg',
       group: null
+    },
+    {
+      id: '3',
+      name: 'Joe Burner',
+      email: 'mjburn0428@byui.edu',
+      phone: '540-555-5857',
+      imageUrl: '/assets/images/Joe BYUI.jpg',
+      group: null
     }
   ];
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Message } from '../models/message.model';  // Ensure correct path to the model
+import { Message } from '../models/message.model';  
 import { CommonModule } from '@angular/common';
 import { MessageItemComponent } from '../message-item/message-item.component';
 import { MessageEditComponent } from '../message-edit/message-edit.component';
@@ -12,7 +12,7 @@ import { MessageEditComponent } from '../message-edit/message-edit.component';
   imports: [CommonModule, MessageItemComponent, MessageEditComponent]
 })
 export class MessageListComponent {
-  // Define the messages array with content from the screenshot
+
   messages: Message[] = [
     new Message(1, 'Bro. Jackson', 'The grades for this assignment have been posted', 'Bro. Jackson'),
     new Message(2, 'Steve Johnson', 'When is assignment 3 due', 'Steve Johnson'),

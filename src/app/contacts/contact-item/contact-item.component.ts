@@ -4,7 +4,7 @@ import { Contact } from '../models/contact.model';
 
 @Component({
   selector: 'cms-contact-item',
-  standalone: true,  // Mark this component as standalone
+  standalone: true,  
   imports: [CommonModule],  // Import CommonModule to use Angular features like ngIf
   templateUrl: './contact-item.component.html',
   styleUrls: ['./contact-item.component.css']
