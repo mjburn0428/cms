@@ -10,4 +10,10 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [HeaderComponent, ContactsComponent, RouterModule]
 })
-export class AppComponent { }
+export class AppComponent {
+  selectedFeature: string = 'documents'; // Default view is Documents
+
+  switchView(selectedFeature: string) {
+    this.selectedFeature = selectedFeature;
+  }
+}
