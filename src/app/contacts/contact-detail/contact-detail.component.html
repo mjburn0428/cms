@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div *ngIf="contact" class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
       {{ contact.name }}
@@ -11,4 +11,9 @@
     <p>Email: {{ contact.email }}</p>
     <p>Phone: {{ contact.phone }}</p>
   </div>
+</div>
+
+<!-- Fallback when no contact is selected -->
+<div *ngIf="!contact">
+  <p>Please select a contact to view the details.</p>
 </div>

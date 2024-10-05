@@ -1,34 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';  // Import CommonModule
+import { Contact } from '../models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
   templateUrl: './contact-detail.component.html',
   styleUrls: ['./contact-detail.component.css'],
-  standalone: true
+  standalone: true,
+  imports: [CommonModule]  // Add CommonModule to the imports array
 })
-export class ContactDetailComponent implements OnInit {
-  contact: { 
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    imageUrl: string;
-    group: any; 
-  };
+export class ContactDetailComponent implements OnChanges {
+  @Input() contact!: Contact;
 
-  constructor() {
-     //Initialize the contact with dummy data for now
-    this.contact = {
-      id: '1',
-      name: 'R. Kent Jackson',
-      email: 'jacksonk@byui.edu',
-      phone: '208-496-3771',
-      imageUrl: '/assets/images/jacksonk.jpg',
-      group: null
-    };
-  }
-
-  ngOnInit(): void {
-    // This will eventually fetch the real data
+  ngOnChanges() {
+    console.log('Received contact:', this.contact);  // Log to check contact data
   }
 }

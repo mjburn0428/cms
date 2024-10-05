@@ -5,7 +5,10 @@
   </div>
   <div class="panel-body">
     <ul class="list-group">
-      <li class="list-group-item" *ngFor="let contact of contacts">
+      <li 
+        class="list-group-item" 
+        *ngFor="let contact of contacts" 
+        (click)="onSelected(contact)"> <!-- Detect click and pass the contact -->
         <!-- Pass the contact object to the ContactItemComponent -->
         <cms-contact-item [contact]="contact"></cms-contact-item>
       </li>

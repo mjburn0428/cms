@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactItemComponent } from '../contact-item/contact-item.component';  // Import ContactItemComponent
+import { Contact } from '../models/contact.model';  // Import Contact model
 
 @Component({
   selector: 'app-contact-list',
@@ -10,13 +11,15 @@ import { ContactItemComponent } from '../contact-item/contact-item.component';  
   imports: [CommonModule, ContactItemComponent]  // Add ContactItemComponent to imports array
 })
 export class ContactListComponent {
-  contacts = [
+  @Output() selectedContactEvent = new EventEmitter<Contact>();  // Create EventEmitter for Contact
+
+  contacts: Contact[] = [
     {
       id: '1',
       name: 'R. Kent Jackson',
       email: 'jacksonk@byui.edu',
       phone: '208-496-3771',
-      imageUrl: '/assets/images/jacksonk.jpg',  // Correct path
+      imageUrl: '/assets/images/jacksonk.jpg',
       group: null
     },
     {
@@ -24,10 +27,15 @@ export class ContactListComponent {
       name: 'Rex Barzee',
       email: 'barzeer@byui.edu',
       phone: '208-496-3768',
-      imageUrl: '/assets/images/barzeer.jpg',  // Correct path
+      imageUrl: '/assets/images/barzeer.jpg',
       group: null
     }
   ];
 
   constructor() {}
+
+  // Method to emit the selected contact
+  onSelected(contact: Contact) {
+    this.selectedContactEvent.emit(contact);  // Emit the selected contact
+  }
 }
