@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   imports: [DocumentListComponent, DocumentDetailComponent, CommonModule]  // Ensure proper imports
 })
 export class DocumentsComponent {
-  selectedDocument!: Document;  // Hold the selected document
+  selectedDocument!: Document;  // Holds the selected document
 
   // This method handles the event when a document is selected
   onDocumentSelected(document: Document) {
