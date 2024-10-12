@@ -1,25 +1,30 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DocumentItemComponent } from '../document-item/document-item.component';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';  // Import CommonModule
+import { Document } from '../models/document.model';  // Ensure correct path
 
 @Component({
   selector: 'app-document-list',
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.css'],
-  standalone: true,
-  imports: [CommonModule, DocumentItemComponent]  // Ensure the necessary modules and components are imported
+  standalone: true,  // Mark as standalone
+  imports: [CommonModule]  // Import CommonModule to use *ngFor and *ngIf
 })
 export class DocumentListComponent {
-  documents = [
-    {
-      id: '1',
-      name: 'Document 1',
-      description: 'This is the first document'
-    },
-    {
-      id: '2',
-      name: 'Document 2',
-      description: 'This is the second document'
-    }
+  documents: Document[] = [
+    new Document(1, 'CIT 260', 'Object Oriented Programming', 'http://example.com/cit260'),
+    new Document(2, 'CIT 366', 'Full Web Stack Development', 'http://example.com/cit366'),
+    new Document(3, 'CIT 425', 'Data Warehousing', 'http://example.com/cit425'),
+    new Document(4, 'CIT 460', 'Enterprise Development', 'http://example.com/cit460'),
+    new Document(5, 'CIT 495', 'Senior Practicum', 'http://example.com/cit495')
   ];
+
+  @Output() selectedDocumentEvent = new EventEmitter<Document>();
+
+  onSelectedDocument(document: Document) {
+    this.selectedDocumentEvent.emit(document);
+  }
 }
+
+
+
+

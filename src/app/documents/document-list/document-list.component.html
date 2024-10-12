@@ -1,14 +1,12 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <div class="row pad-left-right">
-      <span class="pull-left title">Documents</span>
-      <a class="btn btn-success pull-right">Add Document</a>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Documents</h2>
+    <button class="btn btn-success">Add Document</button>
+    <div class="card-container">
+      <div class="card" *ngFor="let document of documents" (click)="onSelectedDocument(document)">
+        <h4>{{ document.name }}</h4>
+        <p>{{ document.description }}</p>
+      </div>
     </div>
   </div>
-  <div class="panel-body">
-    <div class="center-panel">
-      <cms-document-item></cms-document-item>
-    </div>
-  </div>
-
 </div>

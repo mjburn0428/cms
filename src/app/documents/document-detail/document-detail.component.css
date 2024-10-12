@@ -1,15 +1,13 @@
-.title {
-  font-weight: bold;
-  padding-left: 1rem;
-  padding-right: 1rem;
+.card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.margin-left-right{
-  margin-left:1rem;
-  margin-right:1rem;
+.btn-group {
+  margin-bottom: 10px;
 }
 
-.pad-left-right{
-  margin-left:1rem;
-  margin-right:1rem;
+hr {
+  margin: 10px 0;
 }

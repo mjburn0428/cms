@@ -1,12 +1,21 @@
 import { Component } from '@angular/core';
-import { DocumentListComponent } from './document-list/document-list.component';  // Adjust the path if needed
-import { DocumentDetailComponent } from './document-detail/document-detail.component';  // Adjust the path if necessary
+import { Document } from './models/document.model';  // Ensure correct path
+import { DocumentListComponent } from './document-list/document-list.component';
+import { DocumentDetailComponent } from './document-detail/document-detail.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-documents',
   templateUrl: './documents.component.html',
   styleUrls: ['./documents.component.css'],
   standalone: true,
-  imports: [DocumentListComponent, DocumentDetailComponent]  // Import DocumentListComponent here
+  imports: [DocumentListComponent, DocumentDetailComponent, CommonModule]  // Ensure proper imports
 })
-export class DocumentsComponent { }
+export class DocumentsComponent {
+  selectedDocument!: Document;  // Hold the selected document
+
+  // This method handles the event when a document is selected
+  onDocumentSelected(document: Document) {
+    this.selectedDocument = document;
+  }
+}

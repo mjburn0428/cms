@@ -1,16 +1,36 @@
-
-.center-panel {
-  margin-left: auto;
-  margin-right: auto;
-  width: 38rem;
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* Space between cards */
+  margin-top: 20px;
 }
 
-.title {
-  font-size: 2.5rem;
-  font-weight: bold;
+.card {
+  flex: 1 1 calc(25% - 20px);  /* Adjust this to fit 4 cards in a row */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.pad-left-right{
-  padding-left:1rem;
-  padding-right:1rem;
+.card:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card h4 {
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #666;
+}
+
+button.btn-success {
+  float: right;
+  margin-bottom: 20px;
 }
