@@ -1,27 +1,7 @@
-/* Custom styling for the navbar */
-.navbar {
-  background-color: #f8f8f8;
-  border-bottom: 1px solid #ddd;
-}
-
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.5em;
-}
-
-.navbar-nav > li > a {
-  padding: 15px 20px;
-  font-size: 1.1em;
-}
-
 .dropdown-menu {
-  min-width: 160px;
+  display: none;
 }
 
-.dropdown-menu > li > a {
-  padding: 10px 20px;
-}
-
-.navbar-nav .dropdown-toggle::after {
-  margin-left: 5px;
+.open .dropdown-menu {
+  display: block;
 }
