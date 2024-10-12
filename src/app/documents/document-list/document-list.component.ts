@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';  // Import CommonModule
-import { Document } from '../models/document.model';  // Ensure correct path
+import { Document } from '../models/document.model';  
 
 @Component({
   selector: 'app-document-list',
