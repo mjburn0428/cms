@@ -1,11 +1,34 @@
-<div class="row">
-  <div class="col-md-12">
-    <h2>Documents</h2>
-    <button class="btn btn-success">Add Document</button>
-    <div class="card-container">
-      <div class="card" *ngFor="let document of documents" (click)="onSelectedDocument(document)">
-        <h4>{{ document.name }}</h4>
-        <p>{{ document.description }}</p>
+<div class="container">
+  <div class="row">
+    <!-- Document List Section -->
+    <div class="col-md-8">
+      <h2>Documents</h2>
+      <div class="list-group">
+        <!-- Each document is displayed as a box -->
+        <div 
+          *ngFor="let document of documents" 
+          class="list-group-item box-item"
+          (click)="onSelectedDocument(document)"
+          [class.active]="document === selectedDocument">
+          {{ document.name }}
+        </div>
+      </div>
+      <button class="btn btn-success mt-3">Add Document</button>
+    </div>
+
+    <!-- Document Detail Section -->
+    <div class="col-md-4" *ngIf="selectedDocument">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4>{{ selectedDocument.name }}</h4>
+          <p><strong>Description:</strong> {{ selectedDocument.description }}</p>
+          <p><strong>URL:</strong> 
+            <a [href]="selectedDocument.url" target="_blank">{{ selectedDocument.url }}</a>
+          </p>
+          <button class="btn btn-primary">View</button>
+          <button class="btn btn-warning">Edit</button>
+          <button class="btn btn-danger">Delete</button>
+        </div>
       </div>
     </div>
   </div>
