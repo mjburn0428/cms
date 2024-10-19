@@ -1,20 +1,26 @@
-import { Component } from '@angular/core';
-import { Contact } from './models/contact.model';  // Import the Contact model
+import { Component, OnInit } from '@angular/core';
+import { Contact } from './models/contact.model';  
 import { CommonModule } from '@angular/common';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 import { ContactListComponent } from './contact-list/contact-list.component';
+import { ContactService } from './contact.service';  
 
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.css'],
   standalone: true,
-  imports: [CommonModule, ContactListComponent, ContactDetailComponent]  // Ensure ContactDetailComponent is imported
+  imports: [CommonModule, ContactListComponent, ContactDetailComponent]  
 })
-export class ContactsComponent {
-  selectedContact: Contact | undefined;  // This will store the selected contact
+export class ContactsComponent implements OnInit {
+  selectedContact: Contact | undefined;  
 
-  onContactSelected(contact: Contact) {
-    this.selectedContact = contact;  // Assign the emitted contact to selectedContact
+  constructor(private contactService: ContactService) {}
+
+  ngOnInit() {
+    
+    this.contactService.contactSelectedEvent.subscribe((contact: Contact) => {
+      this.selectedContact = contact;  
+    });
   }
 }

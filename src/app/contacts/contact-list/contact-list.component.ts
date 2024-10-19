@@ -1,46 +1,28 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContactItemComponent } from '../contact-item/contact-item.component';
 import { Contact } from '../models/contact.model';
+import { ContactService } from '../contact.service';
+import { ContactItemComponent } from '../contact-item/contact-item.component';
 
 @Component({
   selector: 'app-contact-list',
-  templateUrl: './contact-list.component.html',
-  styleUrls: ['./contact-list.component.css'],
   standalone: true,
-  imports: [CommonModule, ContactItemComponent]
+  imports: [CommonModule, ContactItemComponent],
+  templateUrl: './contact-list.component.html',
+  styleUrls: ['./contact-list.component.css']
 })
-export class ContactListComponent {
-  @Output() selectedContactEvent = new EventEmitter<Contact>();
+export class ContactListComponent implements OnInit {
+  contacts: Contact[] = [];
 
-  contacts: Contact[] = [
-    {
-      id: '1',
-      name: 'R. Kent Jackson',
-      email: 'jacksonk@byui.edu',
-      phone: '208-496-3771',
-      imageUrl: '/assets/images/jacksonk.jpg',
-      group: null
-    },
-    {
-      id: '2',
-      name: 'Rex Barzee',
-      email: 'barzeer@byui.edu',
-      phone: '208-496-3768',
-      imageUrl: '/assets/images/barzeer.jpg',
-      group: null
-    },
-    {
-      id: '3',
-      name: 'Joe Burner',
-      email: 'mjburn0428@byui.edu',
-      phone: '540-555-5857',
-      imageUrl: '/assets/images/Joe BYUI.jpg',
-      group: null
-    }
-  ];
+  constructor(private contactService: ContactService) {}
 
-  onSelected(contact: Contact) {
-    this.selectedContactEvent.emit(contact);
+  ngOnInit() {
+    this.contacts = this.contactService.getContacts();
+  }
+
+  onSelect(contact: Contact) {
+    this.contactService.contactSelectedEvent.emit(contact); // Emit the contact via ContactService
   }
 }
+
+

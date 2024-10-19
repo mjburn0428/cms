@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Document } from '../models/document.model';  
+import { Document } from '../models/document.model';
 
 @Component({
   selector: 'app-document-list',
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.css'],
   standalone: true,
-  imports: [CommonModule]  
+  imports: [CommonModule]
 })
 export class DocumentListComponent {
   documents: Document[] = [
@@ -18,13 +18,17 @@ export class DocumentListComponent {
     new Document(5, 'CIT 495 Senior Practicum', 'A capstone course where students work on real-world projects in teams to apply their learned skills.', 'https://content.byui.edu/file/c7f455ef-6c77-4d7a-9f7c-d2b21bcdbe68/1/CIT%20495%20course%20description.pdf')
   ];
 
-  selectedDocument: Document | null = null;  
+  
+  @Output() selectedDocumentEvent = new EventEmitter<Document>();
+  selectedDocument: Document | undefined;
 
-  // Method to handle document selection
+  
   onSelectedDocument(document: Document) {
-    this.selectedDocument = document;  
+    this.selectedDocument = document;
+    this.selectedDocumentEvent.emit(document); 
   }
 }
+
 
 
 

@@ -1,18 +1,14 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';  // Import CommonModule
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Contact } from '../models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
-  templateUrl: './contact-detail.component.html',
-  styleUrls: ['./contact-detail.component.css'],
   standalone: true,
-  imports: [CommonModule]  // Add CommonModule to the imports array
+  imports: [CommonModule],
+  templateUrl: './contact-detail.component.html',
+  styleUrls: ['./contact-detail.component.css']
 })
-export class ContactDetailComponent implements OnChanges {
-  @Input() contact!: Contact;
-
-  ngOnChanges() {
-    console.log('Received contact:', this.contact);  // Log to check contact data
-  }
+export class ContactDetailComponent {
+  @Input() contact: Contact | undefined;  // Input to receive the selected contact
 }

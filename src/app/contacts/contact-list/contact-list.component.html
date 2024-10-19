@@ -8,10 +8,11 @@
       <li 
         class="list-group-item" 
         *ngFor="let contact of contacts" 
-        (click)="onSelected(contact)"> <!-- Detect click and pass the contact -->
-        <!-- Pass the contact object to the ContactItemComponent -->
+        (click)="onSelect(contact)"> <!-- Call onSelect() with the contact object -->
         <cms-contact-item [contact]="contact"></cms-contact-item>
       </li>
     </ul>
   </div>
 </div>
+
+
