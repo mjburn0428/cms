@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; 
 import { Message } from '../models/message.model';  
 import { CommonModule } from '@angular/common';
 import { MessageItemComponent } from '../message-item/message-item.component';
 import { MessageEditComponent } from '../message-edit/message-edit.component';
+import { MessageService } from '../message.service'; 
 
 @Component({
   selector: 'app-message-list',
@@ -11,20 +12,19 @@ import { MessageEditComponent } from '../message-edit/message-edit.component';
   styleUrls: ['./message-list.component.css'],
   imports: [CommonModule, MessageItemComponent, MessageEditComponent]
 })
-export class MessageListComponent {
+export class MessageListComponent implements OnInit {
 
-  messages: Message[] = [
-    new Message(1, 'Bro. Jackson', 'The grades for this assignment have been posted', 'Bro. Jackson'),
-    new Message(2, 'Steve Johnson', 'When is assignment 3 due', 'Steve Johnson'),
-    new Message(3, 'Bro. Jackson', 'Assignment 3 is due on Saturday at 11:30 PM', 'Bro. Jackson'),
-    new Message(4, 'Mark Smith', 'Can I meet with you sometime. I need help with assignment 3', 'Mark Smith'),
-    new Message(5, 'Bro. Jackson', 'I can meet with you today at 4:00 PM in my office.', 'Bro. Jackson')
-  ];
+  messages: Message[] = []; // Initialize an empty array for messages
 
-  constructor() { }
+  constructor(private messageService: MessageService) { }
 
-  // Method to add a new message to the list
-  onAddMessage(message: Message) {
-    this.messages.push(message); // Append the new message to the array
+  ngOnInit(): void {
+    // Initially load the messages from the service
+    this.messages = this.messageService.getMessages();
+
+    // Subscribe to the messageChangedEvent to update the list when new messages are added
+    this.messageService.messageChangedEvent.subscribe((messages: Message[]) => {
+      this.messages = messages;  // Update the local messages array when a change occurs
+    });
   }
 }

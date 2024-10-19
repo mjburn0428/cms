@@ -11,19 +11,21 @@ export class ContactService {
 
   constructor() {
     this.contacts = MOCKCONTACTS;
+    
   }
 
-  //New method to get all contacts. 
+  // New method to get all contacts.
   getContacts(): Contact[] {
     return this.contacts.slice();  
   }
 
-  getContact(id: string): Contact | null {
+  // Updated method to return undefined instead of null
+  getContact(id: string): Contact | undefined {
     for (let contact of this.contacts) {
       if (contact.id === id) {
-        return contact;  
+        return contact;  // Return the found contact
       }
     }
-    return null;  
+    return undefined;  // Return undefined if no contact is found
   }
 }

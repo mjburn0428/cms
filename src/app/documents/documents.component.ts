@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Document } from './models/document.model';  // Ensure correct path
+import { Component, OnInit } from '@angular/core';
+import { Document } from './models/document.model';  
+import { DocumentService } from './document.service';  
 import { DocumentListComponent } from './document-list/document-list.component';
 import { DocumentDetailComponent } from './document-detail/document-detail.component';
 import { CommonModule } from '@angular/common';
@@ -9,13 +10,17 @@ import { CommonModule } from '@angular/common';
   templateUrl: './documents.component.html',
   styleUrls: ['./documents.component.css'],
   standalone: true,
-  imports: [DocumentListComponent, DocumentDetailComponent, CommonModule]  // Ensure proper imports
+  imports: [DocumentListComponent, DocumentDetailComponent, CommonModule]
 })
-export class DocumentsComponent {
-  selectedDocument!: Document;  // Holds the selected document
+export class DocumentsComponent implements OnInit {
+  selectedDocument!: Document;  
 
-  // This method handles the event when a document is selected
-  onDocumentSelected(document: Document) {
-    this.selectedDocument = document;
+  constructor(private documentService: DocumentService) {}  
+
+  ngOnInit() {
+    
+    this.documentService.documentSelectedEvent.subscribe((document: Document) => {
+      this.selectedDocument = document;  
+    });
   }
 }

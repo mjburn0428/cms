@@ -1,31 +1,32 @@
-import { Component, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
-import { Message } from '../models/message.model';  // Ensure correct path to your model
-import { FormsModule } from '@angular/forms';  // For form functionality
-import { CommonModule } from '@angular/common';  // Common Angular directives
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { MessageService } from '../message.service';
+import { Message } from '../models/message.model';
 
 @Component({
   selector: 'app-message-edit',
-  standalone: true,  // Make it standalone
+  standalone: true,
   templateUrl: './message-edit.component.html',
   styleUrls: ['./message-edit.component.css'],
-  imports: [CommonModule, FormsModule] // Import Angular modules required for forms
 })
 export class MessageEditComponent {
-  @ViewChild('subject')
-  subjectInputRef!: ElementRef;
-  @ViewChild('msgText')
-  msgTextInputRef!: ElementRef;
-  @Output() addMessageEvent = new EventEmitter<Message>();
+  @ViewChild('subject') subjectInputRef!: ElementRef;
+  @ViewChild('msgText') msgTextInputRef!: ElementRef;
+  
+  currentSender: string = '1';  // Replace with the ID of the sender
 
-  currentSender: string = 'Joe Burner';  // Replace with your desired name
+  constructor(private messageService: MessageService) {}
 
   onSendMessage() {
     const subjectValue = this.subjectInputRef.nativeElement.value;
     const msgTextValue = this.msgTextInputRef.nativeElement.value;
 
-    const newMessage = new Message(1, subjectValue, msgTextValue, this.currentSender);
+    // Generate a new message with a unique ID
+    const newMessageId = (Math.random() * 1000).toString();  // Generate random ID
+    const newMessage = new Message(newMessageId, subjectValue, msgTextValue, this.currentSender);
 
-    this.addMessageEvent.emit(newMessage);
+    // Add the new message to the service
+    this.messageService.addMessage(newMessage);
+
     this.onClear();
   }
 
