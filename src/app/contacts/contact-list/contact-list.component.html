@@ -4,15 +4,34 @@
     <a href="#" class="btn btn-success">New Contact</a>
   </div>
   <div class="panel-body">
+    <!-- Teams Section -->
+    <h4>Teams</h4>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let team of teams">
+        <strong>{{ team.name }}</strong> 
+        <ul>
+          <li 
+            class="list-group-item" 
+            *ngFor="let member of team.group"
+            (click)="onSelect(member)"> 
+            <cms-contact-item [contact]="member"></cms-contact-item>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- Individuals Section -->
+    <h4>Individuals</h4>
     <ul class="list-group">
       <li 
         class="list-group-item" 
-        *ngFor="let contact of contacts" 
-        (click)="onSelect(contact)"> <!-- Call onSelect() with the contact object -->
-        <cms-contact-item [contact]="contact"></cms-contact-item>
+        *ngFor="let individual of individuals"
+        (click)="onSelect(individual)"> 
+        <cms-contact-item [contact]="individual"></cms-contact-item>
       </li>
     </ul>
   </div>
 </div>
+
 
 

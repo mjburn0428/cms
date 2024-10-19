@@ -1,13 +1,22 @@
-.card {
-  border: 1px solid #ddd;
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.document-list {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
   padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  gap: 20px; 
+  overflow-y: auto; 
 }
 
-.btn-group {
-  margin-bottom: 10px;
+.document-detail {
+  flex: 0;
+  padding: 20px;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9; 
 }
 
-hr {
-  margin: 10px 0;
-}

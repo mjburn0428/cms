@@ -13,16 +13,21 @@ import { ContactItemComponent } from '../contact-item/contact-item.component';
 })
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
+  teams: Contact[] = [];
+  individuals: Contact[] = [];
 
   constructor(private contactService: ContactService) {}
 
   ngOnInit() {
     this.contacts = this.contactService.getContacts();
+
+    // Found a way to separate the contacts into teams and individuals 
+    this.teams = this.contacts.filter(contact => contact.group !== null);
+    this.individuals = this.contacts.filter(contact => contact.group === null);
   }
 
   onSelect(contact: Contact) {
-    this.contactService.contactSelectedEvent.emit(contact); // Emit the contact via ContactService
+    this.contactService.contactSelectedEvent.emit(contact); 
   }
 }
-
 
