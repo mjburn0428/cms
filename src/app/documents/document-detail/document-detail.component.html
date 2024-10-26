@@ -1,19 +1,29 @@
 <div *ngIf="document" class="card">
   <div class="card-body">
     <h4>{{ document.name }}</h4>
+    
+    <!-- Action buttons -->
     <div class="btn-group" role="group">
-      <!-- View button to navigate to the document detail view -->
-      <button class="btn btn-primary" [routerLink]="['/documents', document.id]">View</button>
-      <!-- Edit button to navigate to the document edit view -->
-      <button class="btn btn-warning" [routerLink]="['/documents', document.id, 'edit']">Edit</button>
+      <!-- View button navigates to the document detail view -->
+      <a class="btn btn-primary" [routerLink]="['/documents', document.id]">View</a>
+      
+      <!-- Edit button navigates to the document edit view -->
+      <a class="btn btn-warning" [routerLink]="['/documents', document.id, 'edit']">Edit</a>
+      
+      <!-- Delete button triggers onDeleteDocument method -->
       <button class="btn btn-danger" (click)="onDeleteDocument()">Delete</button>
     </div>
+    
     <hr />
+    
+    <!-- Document details -->
     <p><strong>Description:</strong></p>
     <p>{{ document.description }}</p>
     <p><strong>URL:</strong></p>
     <a [href]="document.url" target="_blank">{{ document.url }}</a>
   </div>
 </div>
+``
+
 
 
