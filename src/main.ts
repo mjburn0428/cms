@@ -1,13 +1,19 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { provideRouter } from '@angular/router';
-import { ContactListComponent } from './app/contacts/contact-list/contact-list.component';
+
+// Import other components
+import { DocumentsComponent } from './app/documents/documents.component';
+import { MessageListComponent } from './app/messages/message-list/message-list.component';
+import { ContactsComponent } from './app/contacts/contacts.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter([
-      { path: '', redirectTo: '/contacts', pathMatch: 'full' },
-      { path: 'contacts', component: ContactListComponent }
+      { path: '', redirectTo: '/documents', pathMatch: 'full' },
+      { path: 'documents', component: DocumentsComponent },
+      { path: 'messages', component: MessageListComponent },
+      { path: 'contacts', component: ContactsComponent }
     ])
   ]
 }).catch(err => console.error(err));

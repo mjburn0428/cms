@@ -1,16 +1,11 @@
-<app-header (selectedFeatureEvent)="switchView($event)"></app-header>
+<app-header></app-header>
 
-<div class="container pull-left">
-  <div *ngIf="selectedFeature === 'documents'">
-    <!-- Listen for 'selectedDocumentEvent' emitted from DocumentListComponent -->
-    <app-document-list (selectedDocumentEvent)="onDocumentSelected($event)"></app-document-list>
-    
-    <!-- Display the selected document details in DocumentDetailComponent -->
-    <app-document-detail *ngIf="selectedDocument" [document]="selectedDocument"></app-document-detail>
-  </div>
-
-  <!-- Other views for Messages and Contacts -->
-  <app-message-list *ngIf="selectedFeature === 'messages'"></app-message-list>
-  <app-contacts *ngIf="selectedFeature === 'contacts'"></app-contacts>
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <router-outlet></router-outlet>
+      </div>
+   </div>
 </div>
+
 
