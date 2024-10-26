@@ -1,7 +1,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Contacts</h3>
-    <a href="#" class="btn btn-success">New Contact</a>
+    <a [routerLink]="['/contacts', 'new']" class="btn btn-success">New Contact</a>
   </div>
   <div class="panel-body">
     <!-- Teams Section -->
@@ -10,11 +10,10 @@
       <li class="list-group-item" *ngFor="let team of teams">
         <strong>{{ team.name }}</strong> 
         <ul>
-          <li 
-            class="list-group-item" 
-            *ngFor="let member of team.group"
-            (click)="onSelect(member)"> 
-            <cms-contact-item [contact]="member"></cms-contact-item>
+          <li class="list-group-item" *ngFor="let member of team.group"> 
+            <a [routerLink]="['/contacts', member.id]" routerLinkActive="active">
+              <cms-contact-item [contact]="member"></cms-contact-item>
+            </a>
           </li>
         </ul>
       </li>
@@ -23,15 +22,15 @@
     <!-- Individuals Section -->
     <h4>Individuals</h4>
     <ul class="list-group">
-      <li 
-        class="list-group-item" 
-        *ngFor="let individual of individuals"
-        (click)="onSelect(individual)"> 
-        <cms-contact-item [contact]="individual"></cms-contact-item>
+      <li class="list-group-item" *ngFor="let individual of individuals">
+        <a [routerLink]="['/contacts', individual.id]" routerLinkActive="active">
+          <cms-contact-item [contact]="individual"></cms-contact-item>
+        </a>
       </li>
     </ul>
   </div>
 </div>
+
 
 
 

@@ -7,6 +7,8 @@ import { DocumentDetailComponent } from './app/documents/document-detail/documen
 import { DocumentEditComponent } from './app/documents/document-edit/document-edit.component'; // Document Edit Component for new/edit routes
 import { MessageListComponent } from './app/messages/message-list/message-list.component';
 import { ContactsComponent } from './app/contacts/contacts.component';
+import { ContactDetailComponent } from './app/contacts/contact-detail/contact-detail.component';
+import { ContactEditComponent } from './app/contacts/contact-edit/contact-edit.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -28,8 +30,17 @@ bootstrapApplication(AppComponent, {
       // Messages path
       { path: 'messages', component: MessageListComponent },
 
-      // Contacts path
-      { path: 'contacts', component: ContactsComponent }
+      // Contacts path with child routes for detail and edit
+      { 
+        path: 'contacts', 
+        component: ContactsComponent, 
+        children: [
+          { path: 'new', component: ContactEditComponent }, // New contact
+          { path: ':id', component: ContactDetailComponent }, // Contact detail view
+          { path: ':id/edit', component: ContactEditComponent } // Edit contact
+        ]
+      }
     ])
   ]
 }).catch(err => console.error(err));
+

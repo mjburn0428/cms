@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Contact } from '../models/contact.model';
 import { ContactService } from '../contact.service';
 import { ContactItemComponent } from '../contact-item/contact-item.component';
+import { RouterModule } from '@angular/router'; // Import RouterModule
 
 @Component({
   selector: 'app-contact-list',
   standalone: true,
-  imports: [CommonModule, ContactItemComponent],
+  imports: [CommonModule, ContactItemComponent, RouterModule], // Add RouterModule here
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.css']
 })
@@ -21,7 +22,7 @@ export class ContactListComponent implements OnInit {
   ngOnInit() {
     this.contacts = this.contactService.getContacts();
 
-    // Found a way to separate the contacts into teams and individuals 
+    // Separate the contacts into teams and individuals
     this.teams = this.contacts.filter(contact => contact.group !== null);
     this.individuals = this.contacts.filter(contact => contact.group === null);
   }

@@ -4,7 +4,7 @@
       {{ contact.name }}
       <img [src]="contact.imageUrl" alt="{{ contact.name }}" class="contact-image">
     </h3>
-    <a href="#" class="btn btn-primary">Edit</a>
+    <a [routerLink]="['/contacts', contact.id, 'edit']" class="btn btn-primary">Edit</a>
     <a href="#" class="btn btn-danger">Delete</a>
   </div>
   <div class="panel-body">
@@ -17,3 +17,4 @@
 <div *ngIf="!contact">
   <p>Please select a contact to view the details.</p>
 </div>
+
