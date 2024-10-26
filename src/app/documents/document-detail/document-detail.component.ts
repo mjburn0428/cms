@@ -4,6 +4,9 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 import { Document } from '../models/document.model';
 import { DocumentService } from '../document.service';
 import { Router } from '@angular/router';
+import { WindRefService } from '../../win-ref.service';
+
+
 
 @Component({
   selector: 'app-document-detail',
@@ -14,14 +17,19 @@ import { Router } from '@angular/router';
 })
 export class DocumentDetailComponent implements OnInit {
   document!: Document;
+  nativeWindow: any; // Property to hold the reference to the window object
 
   constructor(
     private documentService: DocumentService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private windRefService: WindRefService // Inject WindRefService
   ) {}
 
   ngOnInit() {
+    // Initialize nativeWindow with the window reference from WindRefService
+    this.nativeWindow = this.windRefService.getNativeWindow();
+
     // Subscribe to route parameters to get the document ID
     this.route.params.subscribe(params => {
       const id = params['id'];
@@ -30,12 +38,18 @@ export class DocumentDetailComponent implements OnInit {
         if (document) {
           this.document = document;
         } else {
-          // Handle case where document is not found (navigate away or show a message)
           console.error('Document not found');
-          this.router.navigate(['/documents']); // Redirect back to documents list if not found
+          this.router.navigate(['/documents']); // Redirect if document not found
         }
       }
     });
+  }
+
+  onView() {
+    // Open the document URL in a new tab
+    if (this.document && this.document.url) {
+      this.nativeWindow.open(this.document.url, '_blank');
+    }
   }
 
   onDeleteDocument() {
