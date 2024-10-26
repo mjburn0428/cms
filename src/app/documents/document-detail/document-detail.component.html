@@ -2,9 +2,11 @@
   <div class="card-body">
     <h4>{{ document.name }}</h4>
     <div class="btn-group" role="group">
-      <button class="btn btn-primary">View</button>
-      <button class="btn btn-warning">Edit</button>
-      <button class="btn btn-danger">Delete</button>
+      <!-- View button to navigate to the document detail view -->
+      <button class="btn btn-primary" [routerLink]="['/documents', document.id]">View</button>
+      <!-- Edit button to navigate to the document edit view -->
+      <button class="btn btn-warning" [routerLink]="['/documents', document.id, 'edit']">Edit</button>
+      <button class="btn btn-danger" (click)="onDeleteDocument()">Delete</button>
     </div>
     <hr />
     <p><strong>Description:</strong></p>

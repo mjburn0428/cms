@@ -4,8 +4,8 @@
     <app-document-list></app-document-list> 
   </div>
 
-  <!-- Document Detail Section  -->
+  <!-- Child Route Outlet for Document Detail and Edit Sections -->
   <div class="document-detail">
-    <app-document-detail [document]="selectedDocument"></app-document-detail>
+    <router-outlet></router-outlet> <!-- Child components will be loaded here -->
   </div>
 </div>

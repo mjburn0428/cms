@@ -8,18 +8,23 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 export class DocumentService {
   private documents: Document[] = [];
 
-  documentSelectedEvent = new EventEmitter<Document>();  // Add EventEmitter here
+  documentSelectedEvent = new EventEmitter<Document>();
+  documentsChanged = new EventEmitter<Document[]>();  // Optional for notifying changes
 
   constructor() {
     this.documents = MOCKDOCUMENTS;  
   }
 
   getDocuments(): Document[] {
-    return this.documents;
+    return this.documents.slice();  // Return a copy of the array
   }
 
-  getDocument(id: number): Document | undefined {  // Use number here
+  getDocument(id: number): Document | undefined {
     return this.documents.find(document => document.id === id);
   }
-}
 
+  deleteDocument(id: number): void {
+    this.documents = this.documents.filter(document => document.id !== id);
+    this.documentsChanged.emit(this.documents.slice());  // Optional: emit updated list
+  }
+}

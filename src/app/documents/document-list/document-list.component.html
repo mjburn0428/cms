@@ -13,7 +13,8 @@
           {{ document.name }}
         </div>
       </div>
-      <button class="btn btn-success mt-3">Add Document</button>
+      <!-- Add Document button for creating a new document -->
+      <button class="btn btn-success mt-3" [routerLink]="['/documents', 'new']">Add Document</button>
     </div>
 
     <!-- Document Detail Section -->
@@ -25,11 +26,14 @@
           <p><strong>URL:</strong> 
             <a [href]="selectedDocument.url" target="_blank">{{ selectedDocument.url }}</a>
           </p>
-          <button class="btn btn-primary">View</button>
-          <button class="btn btn-warning">Edit</button>
-          <button class="btn btn-danger">Delete</button>
+          <!-- View button navigates to the document detail view -->
+          <button class="btn btn-primary" [routerLink]="['/documents', selectedDocument.id]">View</button>
+          <!-- Edit button navigates to the document edit view -->
+          <button class="btn btn-warning" [routerLink]="['/documents', selectedDocument.id, 'edit']">Edit</button>
+          <button class="btn btn-danger" (click)="onDeleteDocument(selectedDocument)">Delete</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
