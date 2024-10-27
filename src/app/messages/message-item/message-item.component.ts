@@ -12,16 +12,21 @@ import { Contact } from '../../contacts/models/contact.model';
 })
 export class MessageItemComponent implements OnInit {
   @Input() message!: Message;
-
-  messageSender!: string; 
+  messageSender: string = 'Unknown Sender'; 
 
   constructor(private contactService: ContactService) {}
 
   ngOnInit(): void {
     // Get the contact based on the message's sender ID
-    const contact: Contact | null | undefined = this.contactService.getContact(this.message.sender);
-
-    // If contact is found, assign the contact's name to messageSender
-    this.messageSender = contact ? contact.name : 'Unknown Sender';
+    this.contactService.getContact(this.message.sender).subscribe(
+      (contact: Contact | undefined) => {
+        // If contact is found, assign the contact's name to messageSender
+        this.messageSender = contact ? contact.name : 'Unknown Sender';
+      },
+      (error) => {
+        console.error('Error fetching contact:', error);
+        this.messageSender = 'Unknown Sender'; // Fallback in case of error
+      }
+    );
   }
 }

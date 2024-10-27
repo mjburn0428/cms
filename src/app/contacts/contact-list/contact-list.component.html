@@ -9,7 +9,7 @@
     <ul class="list-group">
       <li class="list-group-item" *ngFor="let team of teams">
         <strong>{{ team.name }}</strong> 
-        <ul>
+        <ul class="list-group">
           <li class="list-group-item" *ngFor="let member of team.group"> 
             <a [routerLink]="['/contacts', member.id]" routerLinkActive="active">
               <cms-contact-item [contact]="member"></cms-contact-item>
@@ -30,6 +30,7 @@
     </ul>
   </div>
 </div>
+
 
 
 

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-contact-edit',
+  standalone: true, // Mark the component as standalone
+  imports: [CommonModule], // Import CommonModule for ngIf, ngFor, etc.
   templateUrl: './contact-edit.component.html',
   styleUrls: ['./contact-edit.component.css']
 })

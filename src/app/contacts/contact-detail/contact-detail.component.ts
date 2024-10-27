@@ -1,15 +1,16 @@
+// contact-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Contact } from '../models/contact.model';
-import { ContactService } from '../../services/contact.service';
+import { ContactService } from '../contact.service';
 import { switchMap, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-contact-detail',
-  standalone: true,
+  standalone: true, // Mark this component as standalone
   imports: [CommonModule, RouterModule],
   templateUrl: './contact-detail.component.html',
   styleUrls: ['./contact-detail.component.css']
@@ -19,7 +20,8 @@ export class ContactDetailComponent implements OnInit {
 
   constructor(
     private contactService: ContactService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -27,14 +29,20 @@ export class ContactDetailComponent implements OnInit {
       .pipe(
         switchMap(params => {
           const id = params.get('id');
-          console.log('Retrieved Route ID:', id); // Log the ID from the route
           return id ? this.contactService.getContact(id) : of(undefined);
         }),
-        tap(contact => console.log('Fetched Contact:', contact)) // Log contact data for each retrieval
+        tap(contact => console.log('Fetched Contact:', contact))
       )
       .subscribe(contact => {
         this.contact = contact;
-        console.log('Updated Contact in Component:', this.contact); // Log final update
       });
+  }
+
+  onDelete() {
+    if (this.contact) {
+      console.log('Deleting Contact:', this.contact); // Debugging line
+      this.contactService.deleteContact(this.contact);
+      this.router.navigate(['/contacts']); // Using navigate with array format
+    }
   }
 }
