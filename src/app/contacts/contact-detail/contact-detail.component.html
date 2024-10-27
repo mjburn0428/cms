@@ -4,16 +4,15 @@
       {{ contact.name }}
       <img [src]="contact.imageUrl" alt="{{ contact.name }}" class="contact-image">
     </h3>
-    <a href="#" class="btn btn-primary">Edit</a>
-    <a href="#" class="btn btn-danger">Delete</a>
+    <a [routerLink]="['/contacts', contact?.id, 'edit']" class="btn btn-primary">Edit</a> <!-- routerLink usage -->
+    <button class="btn btn-danger" (click)="onDelete()">Delete</button>
   </div>
   <div class="panel-body">
-    <p>Email: {{ contact.email }}</p>
-    <p>Phone: {{ contact.phone }}</p>
+    <p>Email: {{ contact?.email }}</p>
+    <p>Phone: {{ contact?.phone }}</p>
   </div>
 </div>
 
-<!-- Fallback when no contact is selected -->
 <div *ngIf="!contact">
   <p>Please select a contact to view the details.</p>
 </div>

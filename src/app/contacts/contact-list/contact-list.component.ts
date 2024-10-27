@@ -26,8 +26,8 @@ export class ContactListComponent implements OnInit {
 
     // Subscribe to contactChangedEvent to handle updates to the contact list
     this.contactService.contactChangedEvent.subscribe((updatedContacts: Contact[]) => {
-      this.contacts = updatedContacts;
-      this.updateTeamsAndIndividuals();  // Refresh teams and individuals when contacts are updated
+      this.contacts = updatedContacts;  // Update the contact list
+      this.updateTeamsAndIndividuals();  // Refresh teams and individuals
     });
   }
 

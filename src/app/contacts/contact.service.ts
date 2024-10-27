@@ -22,16 +22,15 @@ export class ContactService {
     return of(contact);
   }
 
-  // Ensure there is no extra closing brace here
-deleteContact(contact: Contact): void {
-  console.log('Attempting to delete contact:', contact); // Log contact info
-  const index = this.contacts.findIndex(c => c.id === contact.id);
-  if (index !== -1) {
-    this.contacts.splice(index, 1);
-    this.contactChangedEvent.emit(this.contacts.slice());
-    console.log('Contact deleted successfully'); // Confirmation log
-  } else {
-    console.log('Contact not found for deletion'); // Log if not found
+  deleteContact(id: string): void {
+    console.log('Attempting to delete contact with ID:', id); // Log contact ID
+    const index = this.contacts.findIndex(c => c.id === id);
+    if (index !== -1) {
+      this.contacts.splice(index, 1);
+      this.contactChangedEvent.emit(this.contacts.slice()); // Emit the updated contacts array
+      console.log('Contact deleted successfully'); // Confirmation log
+    } else {
+      console.log('Contact not found for deletion'); // Log if not found
+    }
   }
-}
-}
+}  
