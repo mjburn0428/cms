@@ -1,20 +1,23 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Contact } from './models/contact.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
-  contacts: Contact[] = MOCKCONTACTS;
+  private contacts: Contact[] = MOCKCONTACTS;
   contactSelectedEvent = new EventEmitter<Contact>();
-  contactChangedEvent = new EventEmitter<Contact[]>();
+  contactListChangedEvent = new Subject<Contact[]>();
+  private maxContactId: number;
 
-  constructor() {}
+  constructor() {
+    this.maxContactId = this.getMaxId(); // Initialize maxContactId
+  }
 
   getContacts(): Contact[] {
-    return this.contacts.slice();
+    return this.contacts.slice(); // Return a copy of the contacts list
   }
 
   getContact(id: string): Observable<Contact | undefined> {
@@ -22,15 +25,59 @@ export class ContactService {
     return of(contact);
   }
 
-  deleteContact(id: string): void {
-    console.log('Attempting to delete contact with ID:', id); // Log contact ID
-    const index = this.contacts.findIndex(c => c.id === id);
+  // Helper function to find the maximum ID in the current contacts
+  getMaxId(): number {
+    let maxId = 0;
+    for (const contact of this.contacts) {
+      const currentId = parseInt(contact.id.toString(), 10);
+      if (currentId > maxId) {
+        maxId = currentId;
+      }
+    }
+    return maxId;
+  }
+
+  addContact(newContact: Contact): void {
+    if (!newContact) return;
+
+    // Generate a new unique ID
+    this.maxContactId++;
+    newContact.id = this.maxContactId.toString();
+
+    // Add the contact to the list and emit the updated list
+    this.contacts.push(newContact);
+    this.contactListChangedEvent.next(this.contacts.slice());
+  }
+
+  updateContact(id: string, updatedContact: Contact): void {
+    if (!updatedContact) return;
+
+    // Find the index of the contact to update
+    const index = this.contacts.findIndex(contact => contact.id === id);
     if (index !== -1) {
-      this.contacts.splice(index, 1);
-      this.contactChangedEvent.emit(this.contacts.slice()); // Emit the updated contacts array
-      console.log('Contact deleted successfully'); // Confirmation log
-    } else {
-      console.log('Contact not found for deletion'); // Log if not found
+      updatedContact.id = id; // Ensure the updated contact retains the same ID
+      this.contacts[index] = updatedContact;
+      this.contactListChangedEvent.next(this.contacts.slice());
     }
   }
-}  
+
+  // Function to delete a contact by its id
+  deleteContactById(id: string): void {
+    this.contacts = this.contacts.filter(contact => contact.id !== id);
+    this.contactListChangedEvent.next(this.contacts.slice());
+  }
+
+  // Function to delete a contact by passing the contact object directly
+  deleteContact(contact: Contact): void {
+    if (!contact) return;
+
+    const pos = this.contacts.indexOf(contact); // Find the index of the contact
+    if (pos < 0) return; // Exit if contact is not found
+
+    this.contacts.splice(pos, 1); // Remove the contact from the array
+
+    // Emit the updated contacts list
+    this.contactListChangedEvent.next(this.contacts.slice());
+  }
+}
+

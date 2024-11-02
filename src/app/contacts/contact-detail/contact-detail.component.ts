@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // Import RouterModule
+import { RouterModule } from '@angular/router';
 import { ContactService } from '../contact.service';
 import { Contact } from '../models/contact.model';
 import { switchMap } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 @Component({
   selector: 'app-contact-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule], // Include RouterModule here
+  imports: [CommonModule, RouterModule],
   templateUrl: './contact-detail.component.html',
   styleUrls: ['./contact-detail.component.css']
 })
@@ -38,7 +38,7 @@ export class ContactDetailComponent implements OnInit {
 
   onDelete(): void {
     if (this.contact) {
-      this.contactService.deleteContact(this.contact.id);
+      this.contactService.deleteContactById(this.contact.id); // Use deleteContactById for deleting by id
       this.router.navigate(['/contacts']);
     }
   }

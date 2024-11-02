@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Contact } from '../models/contact.model';
 import { ContactService } from '../contact.service';
 import { ContactItemComponent } from '../contact-item/contact-item.component';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
@@ -12,10 +13,11 @@ import { RouterModule } from '@angular/router';
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.css']
 })
-export class ContactListComponent implements OnInit {
+export class ContactListComponent implements OnInit, OnDestroy {
   contacts: Contact[] = [];      // Full list of contacts
   teams: Contact[] = [];         // Contacts grouped as teams
   individuals: Contact[] = [];   // Contacts without group association (individuals)
+  private subscription: Subscription | undefined; // Subscription to manage event cleanup
 
   constructor(private contactService: ContactService) {}
 
@@ -24,11 +26,18 @@ export class ContactListComponent implements OnInit {
     this.contacts = this.contactService.getContacts();
     this.updateTeamsAndIndividuals();  // Organize contacts into teams and individuals
 
-    // Subscribe to contactChangedEvent to handle updates to the contact list
-    this.contactService.contactChangedEvent.subscribe((updatedContacts: Contact[]) => {
+    // Subscribe to contactListChangedEvent to handle updates to the contact list
+    this.subscription = this.contactService.contactListChangedEvent.subscribe((updatedContacts: Contact[]) => {
       this.contacts = updatedContacts;  // Update the contact list
       this.updateTeamsAndIndividuals();  // Refresh teams and individuals
     });
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe to prevent memory leaks
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   // Helper method to separate contacts into teams and individuals
@@ -42,5 +51,6 @@ export class ContactListComponent implements OnInit {
     this.contactService.contactSelectedEvent.emit(contact);
   }
 }
+
 
 
