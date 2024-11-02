@@ -16,17 +16,19 @@ export class ContactService {
     this.maxContactId = this.getMaxId(); // Initialize maxContactId
   }
 
+  // Return a copy of the contacts list
   getContacts(): Contact[] {
-    return this.contacts.slice(); // Return a copy of the contacts list
+    return this.contacts.slice();
   }
 
+  // Get a specific contact by ID as an Observable
   getContact(id: string): Observable<Contact | undefined> {
     const contact = this.contacts.find(contact => contact.id === id);
     return of(contact);
   }
 
-  // Helper function to find the maximum ID in the current contacts
-  getMaxId(): number {
+  // Find the maximum ID in the current contacts
+  private getMaxId(): number {
     let maxId = 0;
     for (const contact of this.contacts) {
       const currentId = parseInt(contact.id.toString(), 10);
@@ -37,47 +39,44 @@ export class ContactService {
     return maxId;
   }
 
+  // Add a new contact with a unique ID
   addContact(newContact: Contact): void {
     if (!newContact) return;
 
-    // Generate a new unique ID
     this.maxContactId++;
     newContact.id = this.maxContactId.toString();
-
-    // Add the contact to the list and emit the updated list
     this.contacts.push(newContact);
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 
+  // Update an existing contact by ID
   updateContact(id: string, updatedContact: Contact): void {
     if (!updatedContact) return;
 
-    // Find the index of the contact to update
     const index = this.contacts.findIndex(contact => contact.id === id);
     if (index !== -1) {
-      updatedContact.id = id; // Ensure the updated contact retains the same ID
+      updatedContact.id = id;
       this.contacts[index] = updatedContact;
       this.contactListChangedEvent.next(this.contacts.slice());
     }
   }
 
-  // Function to delete a contact by its id
+  // Delete a contact by its ID
   deleteContactById(id: string): void {
     this.contacts = this.contacts.filter(contact => contact.id !== id);
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 
-  // Function to delete a contact by passing the contact object directly
+  // Delete a contact by passing the contact object
   deleteContact(contact: Contact): void {
     if (!contact) return;
 
-    const pos = this.contacts.indexOf(contact); // Find the index of the contact
-    if (pos < 0) return; // Exit if contact is not found
+    const pos = this.contacts.indexOf(contact);
+    if (pos < 0) return;
 
-    this.contacts.splice(pos, 1); // Remove the contact from the array
-
-    // Emit the updated contacts list
+    this.contacts.splice(pos, 1);
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 }
+
 
