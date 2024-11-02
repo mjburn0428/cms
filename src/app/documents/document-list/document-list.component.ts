@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Document } from '../models/document.model';
 import { DocumentService } from '../document.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-document-list',
@@ -11,17 +12,18 @@ import { DocumentService } from '../document.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
 })
-export class DocumentListComponent implements OnInit {
+export class DocumentListComponent implements OnInit, OnDestroy {
   documents: Document[] = [];
   selectedDocument: Document | undefined;
+  private documentSubscription: Subscription | undefined; // Subscription for document changes
 
   constructor(private documentService: DocumentService) {}
 
   ngOnInit() {
-    // Subscribe to documentChangedEvent to update the document list when a document is deleted
-    this.documentService.documentChangedEvent.subscribe((documents: Document[]) => {
-      this.documents = documents;
-    });
+    this.documentSubscription = this.documentService.documentChangedEvent
+      .subscribe((documents: Document[]) => {
+        this.documents = documents;
+      });
 
     // Initialize the document list
     this.documents = this.documentService.getDocuments();
@@ -32,14 +34,23 @@ export class DocumentListComponent implements OnInit {
   }
 
   onDeleteDocument(document: Document) {
-    // Call deleteDocument from the service; subscription will update the document list
+    
     this.documentService.deleteDocument(document.id);
-    // Clear selectedDocument if it was deleted
+
+    // Clears selectedDocument if it was deleted
     if (this.selectedDocument?.id === document.id) {
       this.selectedDocument = undefined;
     }
   }
+
+  ngOnDestroy() {
+    // Unsubscribe to avoid memory leaks
+    if (this.documentSubscription) {
+      this.documentSubscription.unsubscribe();
+    }
+  }
 }
+
 
 
 

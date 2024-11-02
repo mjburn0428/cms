@@ -1,4 +1,5 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Document } from './models/document.model';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 
@@ -7,8 +8,8 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 })
 export class DocumentService {
   private documents: Document[] = [];
-  documentSelectedEvent = new EventEmitter<Document>();
-  documentChangedEvent = new EventEmitter<Document[]>(); // Renamed for consistency
+  documentSelectedEvent = new Subject<Document>(); // Optional: can use if needed for selection notifications
+  documentChangedEvent = new Subject<Document[]>(); // Use Subject as an Observable
   private maxDocumentId: number;
 
   constructor() {
@@ -46,7 +47,7 @@ export class DocumentService {
     this.maxDocumentId++;
     newDocument.id = this.maxDocumentId; // Assign a unique ID
     this.documents.push(newDocument);
-    this.documentChangedEvent.emit(this.documents.slice()); // Emit updated list
+    this.documentChangedEvent.next(this.documents.slice()); // Emit updated list
   }
 
   // Update an existing document
@@ -60,7 +61,7 @@ export class DocumentService {
     }
     newDocument.id = originalDocument.id; // Preserve original ID
     this.documents[pos] = newDocument;
-    this.documentChangedEvent.emit(this.documents.slice()); // Emit updated list
+    this.documentChangedEvent.next(this.documents.slice()); // Emit updated list
   }
 
   // Delete a document by ID
@@ -70,7 +71,8 @@ export class DocumentService {
       return;
     }
     this.documents.splice(pos, 1); // Remove document from list
-    this.documentChangedEvent.emit(this.documents.slice()); // Emit updated list
+    this.documentChangedEvent.next(this.documents.slice()); // Emit updated list
   }
 }
+
 
