@@ -61,9 +61,21 @@ export class ContactService {
     }
   }
 
-  // Delete a contact by its ID
+  // Delete a contact by its ID, handling both individual and team contacts
   deleteContactById(id: string): void {
-    this.contacts = this.contacts.filter(contact => contact.id !== id);
+    // Loop through all contacts to find and delete the specified contact
+    this.contacts = this.contacts.map(contact => {
+      if (contact.group && Array.isArray(contact.group)) {
+        // If the contact has a group, filter out the contact with the given ID
+        contact.group = contact.group.filter(member => member.id !== id);
+        return contact;
+      } else {
+        // For individual contacts, return only those that don’t match the given ID
+        return contact.id !== id ? contact : null;
+      }
+    }).filter(contact => contact !== null); // Filter out any null values (deleted individuals)
+
+    // Emit the updated contacts list
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 
