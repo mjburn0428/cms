@@ -5,18 +5,19 @@ import { ContactService } from '../contact.service';
 import { ContactItemComponent } from '../contact-item/contact-item.component';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-contact-list',
   standalone: true,
-  imports: [CommonModule, ContactItemComponent, RouterModule],
+  imports: [CommonModule, ContactItemComponent, RouterModule, DragDropModule],
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.css']
 })
 export class ContactListComponent implements OnInit, OnDestroy {
-  contacts: Contact[] = [];      
-  teams: Contact[] = [];         
-  individuals: Contact[] = [];   
+  contacts: Contact[] = [];
+  teams: Contact[] = [];
+  individuals: Contact[] = [];
   private subscription: Subscription | undefined;
 
   constructor(private contactService: ContactService) {}
@@ -54,6 +55,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
     this.contactService.contactSelectedEvent.emit(contact);
   }
 }
+
 
 
 

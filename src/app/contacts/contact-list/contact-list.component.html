@@ -10,7 +10,7 @@
       <li class="list-group-item" *ngFor="let team of teams">
         <strong>{{ team.name }}</strong> 
         <ul class="list-group">
-          <li class="list-group-item" *ngFor="let member of team.group"> 
+          <li class="list-group-item" *ngFor="let member of team.group" cdkDrag [cdkDragData]="member">
             <a [routerLink]="['/contacts', member.id]" routerLinkActive="active">
               <cms-contact-item [contact]="member"></cms-contact-item>
             </a>
@@ -22,7 +22,7 @@
     <!-- Individuals Section -->
     <h4>Individuals</h4>
     <ul class="list-group">
-      <li class="list-group-item" *ngFor="let individual of individuals">
+      <li class="list-group-item" *ngFor="let individual of individuals" cdkDrag [cdkDragData]="individual">
         <a [routerLink]="['/contacts', individual.id]" routerLinkActive="active">
           <cms-contact-item [contact]="individual"></cms-contact-item>
         </a>

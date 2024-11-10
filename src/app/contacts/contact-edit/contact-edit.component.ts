@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ContactService } from '../contact.service';
 import { Contact } from '../models/contact.model';
+import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-contact-edit',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DragDropModule],
   templateUrl: './contact-edit.component.html',
   styleUrls: ['./contact-edit.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -59,6 +60,13 @@ export class ContactEditComponent implements OnInit {
 
   onCancel(): void {
     this.router.navigate(['/contacts']);
+  }
+
+  onContactDrop(event: CdkDragDrop<Contact[]>): void {
+    const droppedContact = event.item.data;
+    if (!this.groupContacts.find(contact => contact.id === droppedContact.id)) {
+      this.groupContacts.push(droppedContact);
+    }
   }
 }
 
