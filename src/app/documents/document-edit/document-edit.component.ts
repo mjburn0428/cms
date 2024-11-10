@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { NgForm, FormsModule } from '@angular/forms'; // Import FormsModule
+import { NgForm, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Document } from '../models/document.model';
 import { DocumentService } from '../document.service';
 
 @Component({
   selector: 'cms-document-edit',
   standalone: true,
-  imports: [FormsModule], // Add FormsModule here
+  imports: [FormsModule, CommonModule], // Add FormsModule and CommonModule
   templateUrl: './document-edit.component.html',
-  styleUrl: './document-edit.component.css'
+  styleUrls: ['./document-edit.component.css']
 })
 export class DocumentEditComponent implements OnInit {
   originalDocument: Document | null = null;
   document: Document = { id: 0, name: '', description: '', url: '' };
-  editMode: boolean = false;
+  editMode = false;
 
   constructor(
     private documentService: DocumentService,
@@ -35,18 +36,13 @@ export class DocumentEditComponent implements OnInit {
         return;
       }
       this.editMode = true;
-      this.document = JSON.parse(JSON.stringify(this.originalDocument)); // Clone the document
+      this.document = { ...this.originalDocument }; // Clone the document
     });
   }
 
   onSubmit(form: NgForm) {
-    const value = form.value;
-    const newDocument = new Document(
-      this.document.id,
-      value.name,
-      value.description,
-      value.url
-    );
+    const { name, description, url } = form.value;
+    const newDocument = { ...this.document, name, description, url };
 
     if (this.editMode && this.originalDocument) {
       this.documentService.updateDocument(this.originalDocument, newDocument);
@@ -61,4 +57,3 @@ export class DocumentEditComponent implements OnInit {
     this.router.navigate(['/documents']);
   }
 }
-

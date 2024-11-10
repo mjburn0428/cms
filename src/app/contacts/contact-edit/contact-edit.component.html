@@ -1,17 +1,110 @@
-<div class="contact-edit">
-  <h2 *ngIf="contactId; else newContact">Edit Contact</h2>
-  <ng-template #newContact><h2>New Contact</h2></ng-template>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <form #f="ngForm" id="contact-edit" (ngSubmit)="onSubmit(f)">
+      <!-- Name Field -->
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            name="name"
+            [(ngModel)]="contact.name"
+            #name="ngModel"
+            required
+          />
+        </div>
+      </div>
 
-  <form>
-    <label for="name">Name:</label>
-    <input id="name" type="text" />
+      <!-- Error Message for Name and Email Required Fields -->
+      <div *ngIf="(!name.valid && name.touched) || (!email.valid && email.touched)"
+           class="alert alert-danger">
+        The Name and Email fields are required.
+      </div>
 
-    <label for="email">Email:</label>
-    <input id="email" type="email" />
+      <!-- Email Field -->
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="contact.email"
+            #email="ngModel"
+            required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+          />
+        </div>
+      </div>
 
-    <!-- Add more fields as needed -->
+      <!-- Error Message for Invalid Email -->
+      <div *ngIf="email.invalid && email.touched" class="alert alert-danger">
+        Enter a valid Email address.
+      </div>
 
-    <button type="button" (click)="onSave()">Save</button>
-    <button type="button" (click)="onCancel()">Cancel</button>
-  </form>
+      <!-- Phone Field -->
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="phone">Phone:</label>
+          <input
+            type="text"
+            id="phone"
+            class="form-control"
+            name="phone"
+            [(ngModel)]="contact.phone"
+            #phone="ngModel"
+            pattern="\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*"
+          />
+        </div>
+      </div>
+
+      <!-- Error Message for Invalid Phone -->
+      <div *ngIf="phone.invalid && phone.touched" class="alert alert-danger">
+        Enter a valid phone number.
+      </div>
+
+      <!-- Image URL Field -->
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="imageUrl">Image URL:</label>
+          <input
+            type="text"
+            id="imageUrl"
+            class="form-control"
+            name="imageUrl"
+            [(ngModel)]="contact.imageUrl"
+          />
+        </div>
+      </div>
+
+      <!-- Group Contacts Section -->
+      <div class="row">
+        <div class="form-group">
+          <label for="groupList">Group Contacts:</label>
+          <div class="row" id="groupList" style="min-height: 3rem;">
+            <div *ngFor="let contact of groupContacts; let i = index">
+              <div>
+                <cms-contact-item class="col-sm-11" [contact]="contact"></cms-contact-item>
+                <button class="btn btn-danger col-sm-2 deleteButton" (click)="onRemoveItem(i)">X</button>
+              </div>
+            </div>
+            <span class="dragMsg" *ngIf="(groupContacts?.length || 0) < 1">Drag contacts in group here</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons with Save Disabled on Invalid Form -->
+      <div class="row">
+        <div class="col-xs-12 btn-toolbar">
+          <button class="btn btn-success" type="submit" [disabled]="f.invalid">Save</button>
+          <button class="btn btn-primary" type="button" (click)="onCancel()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
+
+
