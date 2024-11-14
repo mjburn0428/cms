@@ -5,12 +5,13 @@ import { ContactService } from '../contact.service';
 import { ContactItemComponent } from '../contact-item/contact-item.component';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop'; // <-- Add this import
+import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
+import { ContactsFilterPipe } from '../shared/contacts-filter.pipe'; // <-- Import the ContactsFilterPipe
 
 @Component({
   selector: 'app-contact-list',
   standalone: true,
-  imports: [CommonModule, ContactItemComponent, RouterModule, DragDropModule],
+  imports: [CommonModule, ContactItemComponent, RouterModule, DragDropModule, ContactsFilterPipe], // <-- Add ContactsFilterPipe to imports
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.css']
 })
@@ -18,7 +19,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
   contacts: Contact[] = [];
   teams: Contact[] = [];
   individuals: Contact[] = [];
-  private subscription: Subscription = new Subscription(); // Ensure subscription is initialized
+  term: string = '';  // <-- Define the term property for the search term
+  private subscription: Subscription = new Subscription();
 
   constructor(private contactService: ContactService) {}
 
@@ -37,6 +39,11 @@ export class ContactListComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  // Method to handle search term input
+  search(value: string) {  // <-- Define the search method
+    this.term = value;
   }
 
   // Separate contacts into teams and individuals
@@ -59,8 +66,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
   onDrop(event: CdkDragDrop<Contact[]>) {
     const previousIndex = event.previousIndex;
     const currentIndex = event.currentIndex;
-    
-    // Handle the logic of reordering or moving the contact between teams or individuals
+
     if (event.container.id === event.previousContainer.id) {
       // Same container: reorder the list
       this.moveItemInList(previousIndex, currentIndex);
@@ -84,8 +90,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
     currentContainer.splice(currentIndex, 0, item);
   }
 }
-
-
 
 
 
