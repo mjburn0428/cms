@@ -20,13 +20,15 @@ export class DocumentListComponent implements OnInit, OnDestroy {
   constructor(private documentService: DocumentService) {}
 
   ngOnInit() {
-    this.documentSubscription = this.documentService.documentChangedEvent
-      .subscribe((documents: Document[]) => {
+    // Subscribe to changes in the documents list
+    this.documentSubscription = this.documentService.documentChangedEvent.subscribe(
+      (documents: Document[]) => {
         this.documents = documents;
-      });
+      }
+    );
 
-    // Initialize the document list
-    this.documents = this.documentService.getDocuments();
+    // Fetch the documents from the service
+    this.documentService.fetchDocuments();
   }
 
   onSelectedDocument(document: Document) {
@@ -34,10 +36,9 @@ export class DocumentListComponent implements OnInit, OnDestroy {
   }
 
   onDeleteDocument(document: Document) {
-    
     this.documentService.deleteDocument(document.id);
 
-    // Clears selectedDocument if it was deleted
+    // Clear selectedDocument if it was deleted
     if (this.selectedDocument?.id === document.id) {
       this.selectedDocument = undefined;
     }
@@ -50,6 +51,7 @@ export class DocumentListComponent implements OnInit, OnDestroy {
     }
   }
 }
+
 
 
 
