@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Contact } from './models/contact.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,17 +11,17 @@ export class ContactService {
   contactSelectedEvent = new EventEmitter<Contact>();
   contactListChangedEvent = new Subject<Contact[]>();
   private maxContactId: number = 0;
-  private firebaseUrl = 'https://jbcms-6023e-default-rtdb.firebaseio.com/contacts.json'; // Replace with your Firebase URL
+  private baseUrl = 'http://localhost:3000/contacts'; // NodeJS backend URL
 
   constructor(private http: HttpClient) {
-    this.fetchContacts(); // Fetch contacts from Firebase on initialization
+    this.fetchContacts(); // Fetch contacts from the backend on initialization
   }
 
-  // Fetch contacts from Firebase
+  // Fetch contacts from the backend
   fetchContacts(): void {
-    this.http.get<Contact[]>(this.firebaseUrl).subscribe(
-      (contacts: Contact[]) => {
-        this.contacts = contacts || []; // Use empty array if null
+    this.http.get<{ message: string; contacts: Contact[] }>(this.baseUrl).subscribe(
+      (responseData) => {
+        this.contacts = responseData.contacts || []; // Use empty array if null
         this.maxContactId = this.getMaxId(); // Recalculate maxContactId
         this.contacts.sort((a, b) =>
           a.name.toLowerCase() < b.name.toLowerCase()
@@ -38,33 +38,14 @@ export class ContactService {
     );
   }
 
-  // Store contacts in Firebase
-  private storeContacts(): void {
-    const contactsJson = JSON.stringify(this.contacts); // Convert contacts to JSON string
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    this.http.put(this.firebaseUrl, contactsJson, { headers }).subscribe(
-      () => {
-        this.contactListChangedEvent.next(this.contacts.slice()); // Emit updated contact list
-      },
-      (error: any) => {
-        console.error('Failed to store contacts:', error);
-      }
-    );
-  }
-
   // Return a copy of the contacts list
   getContacts(): Contact[] {
     return this.contacts.slice();
   }
 
   // Get a specific contact by ID
-  getContact(id: string): Observable<Contact | undefined> {
-    const contact = this.contacts.find((contact) => contact.id === id);
-    return new Observable((observer) => {
-      observer.next(contact);
-      observer.complete();
-    });
+  getContact(id: string): Contact | undefined {
+    return this.contacts.find((contact) => contact.id === id);
   }
 
   // Find the maximum ID in the current contacts
@@ -79,32 +60,63 @@ export class ContactService {
     return maxId;
   }
 
-  // Add a new contact with a unique ID
+  // Add a new contact
   addContact(newContact: Contact): void {
     if (!newContact) return;
 
-    this.maxContactId++;
-    newContact.id = this.maxContactId.toString();
-    this.contacts.push(newContact);
-    this.storeContacts(); // Store updated contacts in Firebase
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .post<{ message: string; createdContact: Contact }>(this.baseUrl, newContact, {
+        headers: headers,
+      })
+      .subscribe(
+        (responseData) => {
+          this.contacts.push(responseData.createdContact);
+          this.contacts.sort((a, b) => a.name.localeCompare(b.name));
+          this.contactListChangedEvent.next(this.contacts.slice());
+        },
+        (error: any) => {
+          console.error('Failed to add contact:', error);
+        }
+      );
   }
 
-  // Update an existing contact by ID
+  // Update an existing contact
   updateContact(id: string, updatedContact: Contact): void {
     if (!updatedContact) return;
 
-    const index = this.contacts.findIndex((contact) => contact.id === id);
-    if (index !== -1) {
-      updatedContact.id = id;
-      this.contacts[index] = updatedContact;
-      this.storeContacts(); // Store updated contacts in Firebase
-    }
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .put(this.baseUrl + '/' + id, updatedContact, { headers: headers })
+      .subscribe(
+        () => {
+          const index = this.contacts.findIndex((contact) => contact.id === id);
+          if (index !== -1) {
+            updatedContact.id = id;
+            this.contacts[index] = updatedContact;
+            this.contacts.sort((a, b) => a.name.localeCompare(b.name));
+            this.contactListChangedEvent.next(this.contacts.slice());
+          }
+        },
+        (error: any) => {
+          console.error('Failed to update contact:', error);
+        }
+      );
   }
 
-  // Delete a contact by its ID
+  // Delete a contact by ID
   deleteContactById(id: string): void {
-    this.contacts = this.contacts.filter((contact) => contact.id !== id);
-    this.storeContacts(); // Store updated contacts in Firebase
+    this.http.delete(this.baseUrl + '/' + id).subscribe(
+      () => {
+        this.contacts = this.contacts.filter((contact) => contact.id !== id);
+        this.contactListChangedEvent.next(this.contacts.slice());
+      },
+      (error: any) => {
+        console.error('Failed to delete contact:', error);
+      }
+    );
   }
 
   // Delete a contact by passing the contact object
@@ -113,10 +125,10 @@ export class ContactService {
 
     const pos = this.contacts.indexOf(contact);
     if (pos >= 0) {
-      this.contacts.splice(pos, 1);
-      this.storeContacts(); // Store updated contacts in Firebase
+      this.deleteContactById(contact.id);
     }
   }
 }
+
 
 

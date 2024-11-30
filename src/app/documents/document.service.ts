@@ -8,20 +8,20 @@ import { Document } from './models/document.model';
 })
 export class DocumentService {
   private documents: Document[] = [];
-  documentSelectedEvent = new Subject<Document>(); // Optional: can use if needed for selection notifications
-  documentChangedEvent = new Subject<Document[]>(); // Use Subject as an Observable
+  documentSelectedEvent = new Subject<Document>();
+  documentChangedEvent = new Subject<Document[]>();
   private maxDocumentId: number = 0;
-  private firebaseUrl = 'https://jbcms-6023e-default-rtdb.firebaseio.com/documents.json'; 
+  private baseUrl = 'http://localhost:3000/documents'; // Update to use NodeJS backend
 
   constructor(private http: HttpClient) {
-    this.fetchDocuments(); // Fetch documents from Firebase on initialization
+    this.fetchDocuments(); // Fetch documents from NodeJS backend on initialization
   }
 
-  // Fetch documents from Firebase
+  // Fetch documents from the backend
   fetchDocuments(): void {
-    this.http.get<Document[]>(this.firebaseUrl).subscribe(
-      (documents: Document[]) => {
-        this.documents = documents || []; // Use empty array if null
+    this.http.get<{ message: string; documents: Document[] }>(this.baseUrl).subscribe(
+      (responseData) => {
+        this.documents = responseData.documents || []; // Use empty array if null
         this.maxDocumentId = this.getMaxId(); // Recalculate maxDocumentId
         this.documents.sort((a, b) =>
           a.name.toLowerCase() < b.name.toLowerCase()
@@ -30,28 +30,11 @@ export class DocumentService {
             ? 1
             : 0
         );
-        console.log('Fetched documents from Firebase:', this.documents); // Debug log
+        console.log('Fetched documents from NodeJS:', this.documents); // Debug log
         this.documentChangedEvent.next(this.documents.slice()); // Emit updated list
       },
       (error: any) => {
         console.error('Failed to fetch documents:', error); // Log any fetch errors
-      }
-    );
-  }
-
-  // Store documents in Firebase
-  private storeDocuments(): void {
-    console.log('Storing documents to Firebase:', this.documents); // Debug log
-    const documentsJson = JSON.stringify(this.documents);
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    this.http.put(this.firebaseUrl, documentsJson, { headers }).subscribe(
-      () => {
-        console.log('Documents successfully stored in Firebase.');
-        this.documentChangedEvent.next(this.documents.slice()); // Emit updated list
-      },
-      (error: any) => {
-        console.error('Failed to store documents:', error); // Log any save errors
       }
     );
   }
@@ -78,11 +61,25 @@ export class DocumentService {
     if (!newDocument) {
       return;
     }
-    this.maxDocumentId++;
-    newDocument.id = this.maxDocumentId; // Assign a unique ID
-    this.documents.push(newDocument);
-    console.log('Adding document:', newDocument); // Debug log
-    this.storeDocuments(); // Store updated documents in Firebase
+
+    // Ensure the ID is empty for the new document
+    //newDocument.id = '';
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .post<{ message: string; document: Document }>(this.baseUrl, newDocument, {
+        headers: headers,
+      })
+      .subscribe(
+        (responseData) => {
+          this.documents.push(responseData.document);
+          this.sortAndSend();
+        },
+        (error: any) => {
+          console.error('Failed to add document:', error); // Log any add errors
+        }
+      );
   }
 
   // Update an existing document
@@ -90,15 +87,31 @@ export class DocumentService {
     if (!originalDocument || !newDocument) {
       return;
     }
-    const pos = this.documents.indexOf(originalDocument);
+
+    const pos = this.documents.findIndex((d) => d.id === originalDocument.id);
     if (pos < 0) {
       console.warn('Document not found for update:', originalDocument); // Warn if not found
       return;
     }
-    newDocument.id = originalDocument.id; // Preserve original ID
-    this.documents[pos] = newDocument;
-    console.log('Updating document:', newDocument); // Debug log
-    this.storeDocuments(); // Store updated documents in Firebase
+
+    // Preserve the original ID for the updated document
+    newDocument.id = originalDocument.id;
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .put(this.baseUrl + '/' + originalDocument.id, newDocument, {
+        headers: headers,
+      })
+      .subscribe(
+        () => {
+          this.documents[pos] = newDocument;
+          this.sortAndSend();
+        },
+        (error: any) => {
+          console.error('Failed to update document:', error); // Log any update errors
+        }
+      );
   }
 
   // Delete a document by ID
@@ -108,11 +121,23 @@ export class DocumentService {
       console.warn('Document not found for deletion:', id); // Warn if not found
       return;
     }
-    console.log('Deleting document with ID:', id); // Debug log
-    this.documents.splice(pos, 1); // Remove document from local array
-    this.storeDocuments(); // Store updated documents in Firebase
+
+    this.http.delete(this.baseUrl + '/' + id).subscribe(
+      () => {
+        this.documents.splice(pos, 1); // Remove the document from the local array
+        this.sortAndSend();
+      },
+      (error: any) => {
+        console.error('Failed to delete document:', error); // Log any delete errors
+      }
+    );
+  }
+
+  // Sort documents and notify subscribers
+  private sortAndSend(): void {
+    this.documents.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
+    this.documentChangedEvent.next(this.documents.slice());
   }
 }
-
 
 
